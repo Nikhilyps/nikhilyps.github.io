@@ -3,7 +3,7 @@ export const projects = [
     id: 'forest-adventure',
     title: 'Forest Adventure',
     tagline: 'Explore. Collect. Survive.',
-    description: 'A four-level Unity WebGL adventure developed from a rolling-ball prototype into a complete third-person experience. I built the player movement, collectible objectives, tiger encounters, health and recovery feedback, UI flow, audio, and browser-ready release.',
+    description: 'A four-level Unity WebGL adventure developed from a rolling-ball prototype into a complete third-person experience. I built the player movement, collectible objectives, animal enemy encounters, health and recovery feedback, UI flow, audio, and browser-ready release.',
     engine: 'Unity 6',
     platform: 'WebGL',
     playUrl: 'https://play.unity.com/en/games/067910fc-5e49-4887-b4b1-c9662d538ba3/forest-adventure',
@@ -11,7 +11,7 @@ export const projects = [
     features: [
       'Third-person movement with running and jumping',
       'Four forest levels with collectible-driven objectives',
-      'Tiger patrol, detection, chase, and attack encounters',
+      'Different animal enemy encounters across each level',
       'Health, damage feedback, regeneration, and retry flow',
       'Menus, pause, level completion, and WebGL publishing',
     ],
