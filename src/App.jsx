@@ -9,7 +9,7 @@ function Button({ href, children, subtle = false, target, rel }) {
 
 function Nav() {
   const [open, setOpen] = useState(false)
-  const links = [['Work', '#work'], ['About', '#about'], ['Skills', '#skills'], ['Contact', '#contact']]
+  const links = [['SpinStrike', '#spinstrike'], ['Forest Adventure', '#forest-adventure'], ['About', '#about'], ['Skills', '#skills'], ['Contact', '#contact']]
   const close = () => setOpen(false)
   return <header className="site-header">
     <a href="#top" className="wordmark" aria-label="Nikhil home"><i />NIKHIL<span>DEV</span></a>
@@ -107,31 +107,38 @@ function ScreenshotGallery({ screenshots }) {
   </>
 }
 
-function FeaturedGame() {
-  const game = projects[0]
+function FeaturedProject({ game, index }) {
   const imageFrame = useRef(null)
   const reduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: imageFrame, offset: ['start end', 'end start'] })
   const imageScale = useSpring(useTransform(scrollYProgress, [0, .52, 1], [.94, 1.015, 1.055]), { stiffness: 120, damping: 28 })
-  return <section id="work" className="featured section shell">
-    <div className="section-heading"><p className="eyebrow">SELECTED WORK</p><RevealHeading lines={['One world.', 'Its own rules.']} /></div>
-    <article className="featured-game">
-      <motion.div ref={imageFrame} className="game-hero-visual" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, amount: .2 }} transition={{ duration: reduceMotion ? 0 : .65 }}><motion.img style={{ scale: reduceMotion ? 1 : imageScale }} src={game.gallery[2].src} alt="Forest Adventure enemy encounter" /><span className="game-hero-caption">Forest Adventure / in-game encounter</span><span className="visual-grain" /></motion.div>
+  return <article id={game.id} className={`featured-project featured-project-${game.accent}`}>
+    <div className="project-order"><span>0{index + 1}</span><p>{index === 0 ? 'FIRST FEATURED PROJECT' : 'SECOND FEATURED PROJECT'}</p></div>
+    <div className="featured-game">
+      <motion.div ref={imageFrame} className={`game-hero-visual ${game.id === 'spinstrike' ? 'portrait-hero' : ''}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, amount: .2 }} transition={{ duration: reduceMotion ? 0 : .65 }}><motion.img style={{ scale: reduceMotion ? 1 : imageScale }} src={game.heroImage} alt={game.heroAlt} /><span className="game-hero-caption">{game.title} / in-game capture</span><span className="visual-grain" /></motion.div>
       <div className="game-details">
         <div><p className="eyebrow">FEATURED GAME / {game.engine}</p><h3>{game.title}</h3><p className="game-tagline">{game.tagline}</p><p className="game-description">{game.description}</p></div>
         <div className="game-meta"><div><span>ENGINE</span><strong>{game.engine}</strong></div><div><span>PLATFORM</span><strong>{game.platform}</strong></div></div>
         <motion.ul className="feature-list" initial="hidden" whileInView="visible" viewport={{ once: true, amount: .35 }} variants={{ visible: { transition: { staggerChildren: reduceMotion ? 0 : .075 } } }}>{game.features.map((item, index) => <motion.li key={item} variants={{ hidden: { opacity: 0, y: reduceMotion ? 0 : 12 }, visible: { opacity: 1, y: 0, transition: { duration: reduceMotion ? 0 : .38, ease: 'easeOut' } } }}><b>0{index + 1}</b>{item}</motion.li>)}</motion.ul>
-        <div className="button-row"><Button href={game.playUrl} target="_blank" rel="noreferrer">Play Now</Button><Button href={game.sourceUrl} target="_blank" rel="noreferrer" subtle>View Source</Button></div>
+        <div className="button-row"><Button href={game.playUrl} target="_blank" rel="noreferrer">Play Live Game</Button><Button href={game.sourceUrl} target="_blank" rel="noreferrer" subtle>{game.sourceLabel}</Button></div>
+        <p className="source-note">{game.sourceNote}</p>
       </div>
-    </article>
+    </div>
     <div className="controls-panel"><div><p className="eyebrow">CONTROLS</p><h3>Built to move.</h3></div><ul>{game.controls.map(([key, action]) => <li key={key}><kbd>{key}</kbd><span>{action}</span></li>)}</ul></div>
     <div className="gallery-intro"><p className="eyebrow">GAMEPLAY GALLERY</p><span>Select an image to view it full screen.</span></div>
     <ScreenshotGallery screenshots={game.gallery} />
+  </article>
+}
+
+function FeaturedGame() {
+  return <section id="work" className="featured section shell">
+    <div className="section-heading"><p className="eyebrow">SELECTED WORK</p><RevealHeading lines={['Two worlds.', 'Their own rules.']} /></div>
+    {projects.map((game, index) => <FeaturedProject game={game} index={index} key={game.id} />)}
   </section>
 }
 
 function Projects() {
-  return <section className="projects-section"><div className="shell"><div className="section-heading project-heading"><p className="eyebrow">PROJECT ARCHIVE</p><RevealHeading lines={['Stories in', 'the making.']} /><p>One focused project at a time. More worlds are waiting to be built.</p></div><div className="project-card"><div className="project-card-art"><img src={projects[0].gallery[1].src} alt="" /></div><div><p className="eyebrow">AVAILABLE NOW</p><h3>Forest Adventure</h3><p>A 3D exploration game built with Unity.</p></div><a href={projects[0].playUrl} target="_blank" rel="noreferrer" aria-label="Play Forest Adventure">Play</a></div></div></section>
+  return <section className="projects-section"><div className="shell"><div className="section-heading project-heading"><p className="eyebrow">PROJECT ARCHIVE</p><RevealHeading lines={['Stories in', 'the making.']} /><p>Two playable Unity projects, ordered from newest to first release.</p></div><div className="project-cards">{projects.map((project, index) => <div className="project-card" key={project.id}><div className={`project-card-art ${project.id === 'spinstrike' ? 'portrait-card-art' : ''}`}><img src={project.gallery[1].src} alt="" /></div><div><p className="eyebrow">0{index + 1} / AVAILABLE NOW</p><h3>{project.title}</h3><p>{project.description}</p></div><a href={`#${project.id}`} aria-label={`View ${project.title}`}>View</a></div>)}</div></div></section>
 }
 
 function About() { return <section className="about section shell" id="about"><div className="about-mark">N<span>✦</span></div><div><p className="eyebrow">ABOUT THE DEVELOPER</p><RevealHeading lines={['Making games is my', 'way of exploring.']} /><p className="about-copy">I’m Nikhil, a solo game developer learning, building, and experimenting with Unity. I enjoy exploring ideas across genres and shaping them into thoughtful, playable experiences.</p><a className="text-link" href="https://github.com/Nikhilyps" target="_blank" rel="noreferrer">Follow the journey on GitHub</a></div></section> }
